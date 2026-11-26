@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Easy Kcal</title>
+  <style>
+    :root {
+      --bg: #0E1117;
+      --card: #1A1C23;
+      --border: #333333;
+      --wine: #571712;
+      --wine-hover: #7A231C;
+      --accent: #FF6B6B;
+      --text: #FFFFFF;
+      --muted: #B8BEC9;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 16px 16px 116px 16px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 430px;
+    }
+
+    .header-banner {
+      background: var(--wine);
+      padding: 20px;
+      border-radius: 16px;
+      text-align: center;
+      margin-bottom: 18px;
+      box-shadow: 0 6px 15px rgba(87, 23, 18, 0.25);
+    }
+
+    .header-banner h1 {
+      margin: 0;
+      font-size: 26px;
+      letter-spacing: 1px;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .metric-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .metric-label {
+      font-size: 12px;
+      color: #AAAAAA;
+      margin-bottom: 6px;
+    }
+
+    .metric-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .controls-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      margin: 0 0 12px 0;
+      font-size: 18px;
+    }
+
+    .meals-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .col-title {
+      margin: 0 0 8px 0;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    button, input, textarea, select {
+      font-family: inherit;
+    }
+
+    .meal-btn {
+      width: 100%;
+      min-height: 44px;
+      margin-bottom: 8px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid var(--wine-hover);
+      background: var(--wine);
+      color: var(--text);
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .meal-btn.active {
+      background: var(--wine-hover);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+    }
+
+    .field-group {
+      margin-bottom: 12px;
+    }
+
+    .field-group label {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .field-group input,
+    .field-group textarea {
+      width: 100%;
+      background: #12151C;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 14px;
+    }
+
+    .inline-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .secondary-btn {
+      min-height: 42px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #242832;
+      color: var(--text);
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .workout-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .workout-chip {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #12151C;
+      color: var(--muted);
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .workout-chip.selected {
+      background: var(--wine);
+      border-color: var(--wine-hover);
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .history-item {
+      border-bottom: 1px solid #2A2E39;
+      padding: 10px 0;
+    }
+
+    .history-item:last-child {
+      border-bottom: none;
+    }
+
+    .float-nav-wrap {
+      position: fixed;
+      left: 50%;
+      bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+      transform: translateX(-50%);
+      width: min(390px, calc(100vw - 24px));
+      z-index: 999;
+      pointer-events: none;
+    }
+
+    .float-nav {
+      pointer-events: auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      padding: 6px;
+      border-radius: 26px;
+      background: rgba(24, 27, 34, 0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+    }
+
+    .nav-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      border: none;
+      border-radius: 20px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 4px 2px;
+    }
+
+    .nav-btn.active {
+      background: var(--wine);
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .nav-icon {
+      font-size: 20px;
+      line-height: 22px;
+    }
+
+    .nav-label {
+      font-size: 11px;
+      line-height: 13px;
+      margin-top: 2px;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <div class="header-banner">
+      <h1>Easy Kcal</h1>
+    </div>
+    <div id="app-content"></div>
+  </div>
+
+  <div class="float-nav-wrap">
+    <nav class="float-nav" aria-label="Primary Navigation">
+      <button class="nav-btn active" data-tab="Diary" onclick="switchTab('Diary')">
+        <span class="nav-icon">📖</span>
+        <span class="nav-label">Diary</span>
+      </button>
+      <button class="nav-btn" data-tab="Results" onclick="switchTab('Results')">
+        <span class="nav-icon">📊</span>
+        <span class="nav-label">Results</span>
+      </button>
+      <button class="nav-btn" data-tab="AI" onclick="switchTab('AI')">
+        <span class="nav-icon">✨</span>
+        <span class="nav-label">AI</span>
+      </button>
+      <button class="nav-btn" data-tab="Historic" onclick="switchTab('Historic')">
+        <span class="nav-icon">🕒</span>
+        <span class="nav-label">Historic</span>
+      </button>
+    </nav>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "easy_kcal_v1";
+    const WORKOUTS = ["Abs", "Shoulders + Back", "Cardio", "Quad + Pantu", "Butt", "Arms"];
+
+    const defaultData = {
+      activeTab: "Diary",
+      selectedDate: new Date().toISOString().slice(0, 10),
+      targetKcal: 2000,
+      targetProtein: 130,
+      meals: [
+        { id: 1, name: "Breakfast", calories: 400, protein: 25, mandatory: true },
+        { id: 2, name: "Lunch", calories: 700, protein: 45, mandatory: true },
+        { id: 3, name: "Dinner", calories: 600, protein: 40, mandatory: true },
+        { id: 4, name: "Fruit", calories: 120, protein: 1, mandatory: false }
+      ],
+      logs: {}
+    };
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return structuredClone(defaultData);
+        return { ...structuredClone(defaultData), ...JSON.parse(raw) };
+      } catch {
+        return structuredClone(defaultData);
+      }
+    }
+
+    let state = loadState();
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function getDayLog(dateStr) {
+      if (!state.logs[dateStr]) {
+        state.logs[dateStr] = { eatenMealIds: [], otherCalories: 0, workouts: [], notes: "" };
+      }
+      return state.logs[dateStr];
+    }
+
+    function switchTab(tab) {
+      state.activeTab = tab;
+      saveState();
+      document.querySelectorAll(".nav-btn").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.tab === tab);
+      });
+      render();
+    }
+
+    function toggleMeal(mealId) {
+      const log = getDayLog(state.selectedDate);
+      const idx = log.eatenMealIds.indexOf(mealId);
+      if (idx >= 0) log.eatenMealIds.splice(idx, 1);
+      else log.eatenMealIds.push(mealId);
+      saveState();
+      render();
+    }
+
+    function toggleAllMeals() {
+      const log = getDayLog(state.selectedDate);
+      const allIds = state.meals.map((m) => m.id);
+      const allMarked = allIds.length > 0 && allIds.every((id) => log.eatenMealIds.includes(id));
+      log.eatenMealIds = allMarked ? [] : allIds;
+      saveState();
+      render();
+    }
+
+    function toggleWorkout(w) {
+      const log = getDayLog(state.selectedDate);
+      const idx = log.workouts.indexOf(w);
+      if (idx >= 0) log.workouts.splice(idx, 1);
+      else log.workouts.push(w);
+      saveState();
+      render();
+    }
+
+    function computeDayTotals(dateStr) {
+      const log = getDayLog(dateStr);
+      let kcal = Number(log.otherCalories || 0);
+      let protein = 0;
+      for (const m of state.meals) {
+        if (log.eatenMealIds.includes(m.id)) {
+          kcal += Number(m.calories || 0);
+          protein += Number(m.protein || 0);
+        }
+      }
+      return {
+        spentKcal: Math.round(kcal),
+        remainingKcal: Math.round(Number(state.targetKcal || 2000) - kcal),
+        proteinToGo: Math.round(Math.max(0, Number(state.targetProtein || 130) - protein)),
+        proteinDone: Math.round(protein)
+      };
+    }
+
+    function renderDiary() {
+      const log = getDayLog(state.selectedDate);
+      const totals = computeDayTotals(state.selectedDate);
+      const mandatory = state.meals.filter((m) => m.mandatory);
+      const optional = state.meals.filter((m) => !m.mandatory);
+
+      return `
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-label">Spent Kcal</div>
+            <div class="metric-value">${totals.spentKcal} kcal</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Remaining</div>
+            <div class="metric-value">${totals.remainingKcal} kcal</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Protein Left</div>
+            <div class="metric-value">${totals.proteinToGo}g</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="field-group" style="margin-bottom: 0;">
+            <label for="entry-date">Entry Date</label>
+            <input id="entry-date" type="date" value="${state.selectedDate}" onchange="state.selectedDate = this.value; saveState(); render();" />
+          </div>
+        </div>
+
+        <div class="panel">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <h2 class="section-title" style="margin:0;">Meals</h2>
+            <button class="secondary-btn" onclick="toggleAllMeals()">Toggle All</button>
+          </div>
+          <div class="meals-grid">
+            <div>
+              <h3 class="col-title">Mandatory</h3>
+              ${mandatory.map((m) => {
+                const active = log.eatenMealIds.includes(m.id);
+                return `<button class="meal-btn ${active ? "active" : ""}" onclick="toggleMeal(${m.id})">${active ? "✓ " : ""}${m.name} (${m.calories})</button>`;
+              }).join("") || "<small style='color:#888'>None</small>"}
+            </div>
+            <div>
+              <h3 class="col-title">Optional</h3>
+              ${optional.map((m) => {
+                const active = log.eatenMealIds.includes(m.id);
+                return `<button class="meal-btn ${active ? "active" : ""}" onclick="toggleMeal(${m.id})">${active ? "✓ " : ""}${m.name} (${m.calories})</button>`;
+              }).join("") || "<small style='color:#888'>None</small>"}
+            </div>
+          </div>
+          <div class="field-group" style="margin-top: 12px; margin-bottom: 0;">
+            <label for="other-kcal">Other Calories (extra outside plan)</label>
+            <input id="other-kcal" type="number" min="0" step="10" value="${log.otherCalories || 0}" onchange="getDayLog(state.selectedDate).otherCalories = Number(this.value || 0); saveState(); render();" />
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2 class="section-title">Workout</h2>
+          <div class="workout-pills">
+            ${WORKOUTS.map((w) => {
+              const sel = log.workouts.includes(w);
+              return `<button class="workout-chip ${sel ? "selected" : ""}" onclick="toggleWorkout('${w}')">${w}</button>`;
+            }).join("")}
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2 class="section-title">Notes</h2>
+          <div class="field-group" style="margin-bottom: 0;">
+            <textarea rows="3" placeholder="Write your daily notes..." onchange="getDayLog(state.selectedDate).notes = this.value; saveState();">${log.notes || ""}</textarea>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderResults() {
+      const totals = computeDayTotals(state.selectedDate);
+      return `
+        <div class="panel">
+          <h2 class="section-title">Results & Goals</h2>
+          <p style="color:var(--muted); margin-top:0;">Selected day (${state.selectedDate}): <strong>${totals.spentKcal}</strong> / <strong>${state.targetKcal}</strong> kcal and <strong>${totals.proteinDone}g</strong> / <strong>${state.targetProtein}g</strong> protein.</p>
+          <div class="field-group">
+            <label for="goal-kcal">Daily Calorie Goal (kcal)</label>
+            <input id="goal-kcal" type="number" min="500" max="6000" step="50" value="${state.targetKcal}" onchange="state.targetKcal = Number(this.value || 2000); saveState(); render();" />
+          </div>
+          <div class="field-group" style="margin-bottom:0;">
+            <label for="goal-protein">Daily Protein Goal (g)</label>
+            <input id="goal-protein" type="number" min="0" max="400" step="5" value="${state.targetProtein}" onchange="state.targetProtein = Number(this.value || 130); saveState(); render();" />
+          </div>
+        </div>
+      `;
+    }
+
+    function renderAI() {
+      const totals = computeDayTotals(state.selectedDate);
+      const tip = totals.remainingKcal > 400
+        ? `You still have ${totals.remainingKcal} kcal and ${totals.proteinToGo}g protein left today—a lean protein + veggies meal fits well.`
+        : totals.remainingKcal >= 0
+          ? `You're right on track with ${totals.remainingKcal} kcal remaining today.`
+          : `You're ${Math.abs(totals.remainingKcal)} kcal above your daily target today—keep the next meal light and protein-focused.`;
+
+      return `
+        <div class="panel">
+          <h2 class="section-title">AI Assistant</h2>
+          <p style="line-height:1.5; margin:0;">${tip}</p>
+        </div>
+      `;
+    }
+
+    function renderHistoric() {
+      const dates = Object.keys(state.logs).sort().reverse();
+      return `
+        <div class="panel">
+          <h2 class="section-title">Historic Log</h2>
+          ${dates.length === 0 ? "<p style='color:var(--muted)'>No saved days yet. Mark meals or edit notes in Diary.</p>" : dates.map((d) => {
+            const t = computeDayTotals(d);
+            const l = state.logs[d];
+            return `
+              <div class="history-item">
+                <div><strong>${d}</strong> — ${t.spentKcal} / ${state.targetKcal} kcal</div>
+                <div style="font-size:13px; color:var(--muted);">Workout: ${(l.workouts && l.workouts.length) ? l.workouts.join(", ") : "Rest / None"}</div>
+                ${l.notes ? `<div style="font-size:13px; margin-top:4px;">${l.notes}</div>` : ""}
+              </div>
+            `;
+          }).join("")}
+        </div>
+      `;
+    }
+
+    function render() {
+      document.querySelectorAll(".nav-btn").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.tab === state.activeTab);
+      });
+
+      const container = document.getElementById("app-content");
+      if (state.activeTab === "Diary") container.innerHTML = renderDiary();
+      else if (state.activeTab === "Results") container.innerHTML = renderResults();
+      else if (state.activeTab === "AI") container.innerHTML = renderAI();
+      else container.innerHTML = renderHistoric();
+    }
+
+    render();
+  </script>
+</body>
+</html>
