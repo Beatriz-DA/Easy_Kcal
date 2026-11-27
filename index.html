@@ -10,10 +10,10 @@
       --card: #1A1C23;
       --border: #333333;
       --wine: #571712;
-      --wine-hover: #7A231C;
+      --wine-border: #7A231C;
       --accent: #FF6B6B;
       --text: #FFFFFF;
-      --muted: #B8BEC9;
+      --muted: #AAAAAA;
     }
 
     * {
@@ -25,7 +25,7 @@
       background: var(--bg);
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      padding: 16px 16px 116px 16px;
+      padding: 16px 14px 116px 14px;
       display: flex;
       justify-content: center;
     }
@@ -47,12 +47,13 @@
     .header-banner h1 {
       margin: 0;
       font-size: 26px;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
+      color: var(--text);
     }
 
     .metrics-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 10px;
       margin-bottom: 18px;
     }
@@ -61,140 +62,240 @@
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 12px;
+      padding: 12px 10px;
+      text-align: center;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      min-width: 0;
     }
 
     .metric-label {
       font-size: 12px;
-      color: #AAAAAA;
+      color: var(--muted);
       margin-bottom: 6px;
+      white-space: nowrap;
     }
 
     .metric-value {
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 700;
       color: var(--accent);
+      line-height: 1.2;
+      white-space: nowrap;
     }
 
-    .controls-row {
+    .top-controls {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 12px;
+      align-items: start;
       margin-bottom: 18px;
     }
 
-    .panel {
+    .field-label {
+      display: block;
+      font-size: 13px;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .radio-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 40px;
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .radio-opt {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .radio-opt input[type="radio"] {
+      accent-color: #FF4B4B;
+      width: 15px;
+      height: 15px;
+      margin: 0;
+      cursor: pointer;
+    }
+
+    input[type="date"],
+    input[type="number"],
+    input[type="text"],
+    textarea {
+      width: 100%;
       background: var(--card);
+      color: var(--text);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 14px;
-      margin-bottom: 16px;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 14px;
+      font-family: inherit;
     }
 
     .section-title {
       margin: 0 0 12px 0;
-      font-size: 18px;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .col-title {
+      margin: 0 0 10px 0;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
     }
 
     .meals-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
-    }
-
-    .col-title {
-      margin: 0 0 8px 0;
-      font-size: 14px;
-      color: var(--muted);
-    }
-
-    button, input, textarea, select {
-      font-family: inherit;
+      margin-bottom: 14px;
     }
 
     .meal-btn {
       width: 100%;
-      min-height: 44px;
-      margin-bottom: 8px;
-      padding: 10px;
+      min-height: 40px;
+      margin-bottom: 10px;
+      padding: 8px 12px;
       border-radius: 10px;
-      border: 1px solid var(--wine-hover);
+      border: 1px solid var(--wine-border);
       background: var(--wine);
       color: var(--text);
+      font-size: 14px;
       font-weight: 600;
       cursor: pointer;
+      display: block;
+    }
+
+    .meal-btn:hover {
+      background: var(--wine-border);
     }
 
     .meal-btn.active {
-      background: var(--wine-hover);
+      background: #8C271E;
       box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
     }
 
-    .field-group {
-      margin-bottom: 12px;
+    .other-row {
+      display: grid;
+      grid-template-columns: 1.8fr 1fr;
+      gap: 10px;
+      align-items: end;
+      margin-bottom: 18px;
     }
 
-    .field-group label {
-      display: block;
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
-
-    .field-group input,
-    .field-group textarea {
+    .mark-all-btn {
       width: 100%;
-      background: #12151C;
-      color: var(--text);
-      border: 1px solid var(--border);
+      height: 40px;
       border-radius: 10px;
-      padding: 10px;
+      border: 1px solid var(--wine-border);
+      background: var(--wine);
+      color: var(--text);
       font-size: 14px;
-    }
-
-    .inline-actions {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .secondary-btn {
-      min-height: 42px;
-      padding: 8px 12px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: #242832;
-      color: var(--text);
       font-weight: 600;
       cursor: pointer;
     }
 
-    .workout-pills {
+    .mark-all-btn:hover {
+      background: var(--wine-border);
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #262932;
+      margin: 18px 0;
+    }
+
+    .workout-select-box {
+      width: 100%;
+      background: var(--card);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 14px;
+      text-align: left;
+      cursor: pointer;
       display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .workout-dropdown {
+      margin-top: 8px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 8px;
+      display: none;
       flex-wrap: wrap;
       gap: 8px;
     }
 
+    .workout-dropdown.open {
+      display: flex;
+    }
+
     .workout-chip {
-      padding: 8px 12px;
+      padding: 6px 12px;
       border-radius: 999px;
       border: 1px solid var(--border);
       background: #12151C;
-      color: var(--muted);
+      color: var(--text);
       font-size: 13px;
       cursor: pointer;
     }
 
     .workout-chip.selected {
       background: var(--wine);
-      border-color: var(--wine-hover);
-      color: var(--text);
+      border-color: var(--wine-border);
       font-weight: 600;
     }
 
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    details.expander {
+      border: 1px solid #262932;
+      border-radius: 12px;
+      background: transparent;
+    }
+
+    details.expander > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    details.expander > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .expander-body {
+      padding: 4px 14px 14px 14px;
+    }
+
+    .panel-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+
     .history-item {
-      border-bottom: 1px solid #2A2E39;
+      border-bottom: 1px solid #262932;
       padding: 10px 0;
     }
 
@@ -202,10 +303,11 @@
       border-bottom: none;
     }
 
+    /* Barra flutuante inferior estilo iPhone */
     .float-nav-wrap {
       position: fixed;
       left: 50%;
-      bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+      bottom: calc(14px + env(safe-area-inset-bottom, 0px));
       transform: translateX(-50%);
       width: min(390px, calc(100vw - 24px));
       z-index: 999;
@@ -218,12 +320,12 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 4px;
       padding: 6px;
-      border-radius: 26px;
-      background: rgba(24, 27, 34, 0.94);
+      border-radius: 32px;
+      background: rgba(24, 27, 34, 0.95);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
     }
 
     .nav-btn {
@@ -231,13 +333,13 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 48px;
+      min-height: 52px;
       border: none;
-      border-radius: 20px;
+      border-radius: 26px;
       background: transparent;
-      color: var(--muted);
+      color: #B8BEC9;
       cursor: pointer;
-      padding: 4px 2px;
+      padding: 5px 2px;
     }
 
     .nav-btn.active {
@@ -254,7 +356,7 @@
     .nav-label {
       font-size: 11px;
       line-height: 13px;
-      margin-top: 2px;
+      margin-top: 3px;
       white-space: nowrap;
     }
   </style>
@@ -270,7 +372,7 @@
   <div class="float-nav-wrap">
     <nav class="float-nav" aria-label="Primary Navigation">
       <button class="nav-btn active" data-tab="Diary" onclick="switchTab('Diary')">
-        <span class="nav-icon">📖</span>
+        <span class="nav-icon">✨</span>
         <span class="nav-label">Diary</span>
       </button>
       <button class="nav-btn" data-tab="Results" onclick="switchTab('Results')">
@@ -278,22 +380,23 @@
         <span class="nav-label">Results</span>
       </button>
       <button class="nav-btn" data-tab="AI" onclick="switchTab('AI')">
-        <span class="nav-icon">✨</span>
+        <span class="nav-icon">🤖</span>
         <span class="nav-label">AI</span>
       </button>
       <button class="nav-btn" data-tab="Historic" onclick="switchTab('Historic')">
-        <span class="nav-icon">🕒</span>
+        <span class="nav-icon">📖</span>
         <span class="nav-label">Historic</span>
       </button>
     </nav>
   </div>
 
   <script>
-    const STORAGE_KEY = "easy_kcal_v1";
+    const STORAGE_KEY = "easy_kcal_py_style_v1";
     const WORKOUTS = ["Abs", "Shoulders + Back", "Cardio", "Quad + Pantu", "Butt", "Arms"];
 
     const defaultData = {
       activeTab: "Diary",
+      viewMode: "Day View",
       selectedDate: new Date().toISOString().slice(0, 10),
       targetKcal: 2000,
       targetProtein: 130,
@@ -301,10 +404,12 @@
         { id: 1, name: "Breakfast", calories: 400, protein: 25, mandatory: true },
         { id: 2, name: "Lunch", calories: 700, protein: 45, mandatory: true },
         { id: 3, name: "Dinner", calories: 600, protein: 40, mandatory: true },
-        { id: 4, name: "Fruit", calories: 120, protein: 1, mandatory: false }
+        { id: 4, name: "Whey", calories: 150, protein: 25, mandatory: false }
       ],
       logs: {}
     };
+
+    let workoutMenuOpen = false;
 
     function loadState() {
       try {
@@ -332,9 +437,6 @@
     function switchTab(tab) {
       state.activeTab = tab;
       saveState();
-      document.querySelectorAll(".nav-btn").forEach((btn) => {
-        btn.classList.toggle("active", btn.dataset.tab === tab);
-      });
       render();
     }
 
@@ -347,7 +449,7 @@
       render();
     }
 
-    function toggleAllMeals() {
+    function toggleMarkAll() {
       const log = getDayLog(state.selectedDate);
       const allIds = state.meals.map((m) => m.id);
       const allMarked = allIds.length > 0 && allIds.every((id) => log.eatenMealIds.includes(id));
@@ -376,11 +478,37 @@
         }
       }
       return {
-        spentKcal: Math.round(kcal),
-        remainingKcal: Math.round(Number(state.targetKcal || 2000) - kcal),
-        proteinToGo: Math.round(Math.max(0, Number(state.targetProtein || 130) - protein)),
+        intakeCal: Math.round(kcal),
+        leftCal: Math.round(Number(state.targetKcal || 2000) - kcal),
+        proteinVal: Math.round(Math.max(0, Number(state.targetProtein || 130) - protein)),
         proteinDone: Math.round(protein)
       };
+    }
+
+    function addMealFromForm(e) {
+      e.preventDefault();
+      const nameInput = document.getElementById("new-meal-name");
+      const calInput = document.getElementById("new-meal-cal");
+      const protInput = document.getElementById("new-meal-prot");
+      const mandInput = document.getElementById("new-meal-mand");
+      const name = (nameInput.value || "").trim();
+      if (!name) return;
+      const nextId = state.meals.reduce((acc, m) => Math.max(acc, m.id), 0) + 1;
+      state.meals.push({
+        id: nextId,
+        name,
+        calories: Number(calInput.value || 0),
+        protein: Number(protInput.value || 0),
+        mandatory: Boolean(mandInput.checked)
+      });
+      saveState();
+      render();
+    }
+
+    function deleteMeal(mealId) {
+      state.meals = state.meals.filter((m) => m.id !== mealId);
+      saveState();
+      render();
     }
 
     function renderDiary() {
@@ -388,106 +516,181 @@
       const totals = computeDayTotals(state.selectedDate);
       const mandatory = state.meals.filter((m) => m.mandatory);
       const optional = state.meals.filter((m) => !m.mandatory);
+      const allIds = state.meals.map((m) => m.id);
+      const allMarked = allIds.length > 0 && allIds.every((id) => log.eatenMealIds.includes(id));
+
+      const weekBlock = state.viewMode === "Week View" ? `
+        <div class="panel-box">
+          <h3 class="section-title">Weekly Overview (Last 7 Days)</h3>
+          ${Array.from({ length: 7 }, (_, i) => {
+            const base = new Date(state.selectedDate + "T12:00:00");
+            base.setDate(base.getDate() - i);
+            const iso = base.toISOString().slice(0, 10);
+            const t = computeDayTotals(iso);
+            const l = getDayLog(iso);
+            const wText = (l.workouts && l.workouts.length) ? l.workouts.join(", ") : "Rest / None";
+            return `
+              <div class="history-item" style="display:flex; justify-content:space-between; gap:8px; font-size:13px;">
+                <strong>${iso}</strong>
+                <span><strong>${t.intakeCal}</strong> / ${state.targetKcal} kcal</span>
+                <span style="color:var(--muted); font-style:italic;">${wText}</span>
+              </div>
+            `;
+          }).join("")}
+        </div>
+      ` : `
+        <h2 class="section-title">Meals</h2>
+        <div class="meals-grid">
+          <div>
+            <h3 class="col-title">Mandatory</h3>
+            ${mandatory.map((m) => {
+              const active = log.eatenMealIds.includes(m.id);
+              return `<button class="meal-btn ${active ? "active" : ""}" onclick="toggleMeal(${m.id})">${active ? "✓ " : ""}${m.name}</button>`;
+            }).join("") || "<small style='color:var(--muted)'>No mandatory meals.</small>"}
+          </div>
+          <div>
+            <h3 class="col-title">Optional</h3>
+            ${optional.map((m) => {
+              const active = log.eatenMealIds.includes(m.id);
+              return `<button class="meal-btn ${active ? "active" : ""}" onclick="toggleMeal(${m.id})">${active ? "✓ " : ""}${m.name}</button>`;
+            }).join("") || "<small style='color:var(--muted)'>No optional meals.</small>"}
+          </div>
+        </div>
+
+        <div class="other-row">
+          <div>
+            <label class="field-label" for="other-kcal">Other Calories (extra outside plan):</label>
+            <input id="other-kcal" type="number" min="0" step="10" value="${log.otherCalories || 0}" onchange="getDayLog(state.selectedDate).otherCalories = Number(this.value || 0); saveState(); render();" />
+          </div>
+          <button class="mark-all-btn" onclick="toggleMarkAll()">${allMarked ? "Unmark All" : "Mark All"}</button>
+        </div>
+
+        <hr class="divider" />
+
+        <h2 class="section-title">Workout</h2>
+        <label class="field-label">Select workouts done today:</label>
+        <button class="workout-select-box" type="button" onclick="workoutMenuOpen = !workoutMenuOpen; render();">
+          <span>${(log.workouts && log.workouts.length) ? log.workouts.join(", ") : "Choose options"}</span>
+          <span>⌄</span>
+        </button>
+        <div class="workout-dropdown ${workoutMenuOpen ? "open" : ""}">
+          ${WORKOUTS.map((w) => {
+            const sel = log.workouts.includes(w);
+            return `<button type="button" class="workout-chip ${sel ? "selected" : ""}" onclick="toggleWorkout('${w}')">${w}</button>`;
+          }).join("")}
+        </div>
+
+        <hr class="divider" />
+
+        <h2 class="section-title">Notes</h2>
+        <label class="field-label" for="daily-notes">Daily Notes:</label>
+        <textarea id="daily-notes" onchange="getDayLog(state.selectedDate).notes = this.value; saveState();">${log.notes || ""}</textarea>
+      `;
 
       return `
         <div class="metrics-grid">
           <div class="metric-card">
-            <div class="metric-label">Spent Kcal</div>
-            <div class="metric-value">${totals.spentKcal} kcal</div>
+            <div class="metric-label">Intake (Cal)</div>
+            <div class="metric-value">${totals.intakeCal}</div>
           </div>
           <div class="metric-card">
-            <div class="metric-label">Remaining</div>
-            <div class="metric-value">${totals.remainingKcal} kcal</div>
+            <div class="metric-label">Left (Cal)</div>
+            <div class="metric-value">${totals.leftCal}</div>
           </div>
           <div class="metric-card">
-            <div class="metric-label">Protein Left</div>
-            <div class="metric-value">${totals.proteinToGo}g</div>
+            <div class="metric-label">Protein (g)</div>
+            <div class="metric-value">${totals.proteinVal}</div>
           </div>
         </div>
 
-        <div class="panel">
-          <div class="field-group" style="margin-bottom: 0;">
-            <label for="entry-date">Entry Date</label>
+        <div class="top-controls">
+          <div>
+            <span class="field-label">View Mode</span>
+            <div class="radio-row">
+              <label class="radio-opt">
+                <input type="radio" name="viewMode" value="Day View" ${state.viewMode === "Day View" ? "checked" : ""} onchange="state.viewMode = this.value; saveState(); render();" />
+                <span>Day View</span>
+              </label>
+              <label class="radio-opt">
+                <input type="radio" name="viewMode" value="Week View" ${state.viewMode === "Week View" ? "checked" : ""} onchange="state.viewMode = this.value; saveState(); render();" />
+                <span>Week View</span>
+              </label>
+            </div>
+          </div>
+          <div>
+            <label class="field-label" for="entry-date">Entry Date</label>
             <input id="entry-date" type="date" value="${state.selectedDate}" onchange="state.selectedDate = this.value; saveState(); render();" />
           </div>
         </div>
 
-        <div class="panel">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-            <h2 class="section-title" style="margin:0;">Meals</h2>
-            <button class="secondary-btn" onclick="toggleAllMeals()">Toggle All</button>
-          </div>
-          <div class="meals-grid">
-            <div>
-              <h3 class="col-title">Mandatory</h3>
-              ${mandatory.map((m) => {
-                const active = log.eatenMealIds.includes(m.id);
-                return `<button class="meal-btn ${active ? "active" : ""}" onclick="toggleMeal(${m.id})">${active ? "✓ " : ""}${m.name} (${m.calories})</button>`;
-              }).join("") || "<small style='color:#888'>None</small>"}
-            </div>
-            <div>
-              <h3 class="col-title">Optional</h3>
-              ${optional.map((m) => {
-                const active = log.eatenMealIds.includes(m.id);
-                return `<button class="meal-btn ${active ? "active" : ""}" onclick="toggleMeal(${m.id})">${active ? "✓ " : ""}${m.name} (${m.calories})</button>`;
-              }).join("") || "<small style='color:#888'>None</small>"}
-            </div>
-          </div>
-          <div class="field-group" style="margin-top: 12px; margin-bottom: 0;">
-            <label for="other-kcal">Other Calories (extra outside plan)</label>
-            <input id="other-kcal" type="number" min="0" step="10" value="${log.otherCalories || 0}" onchange="getDayLog(state.selectedDate).otherCalories = Number(this.value || 0); saveState(); render();" />
-          </div>
-        </div>
+        ${weekBlock}
 
-        <div class="panel">
-          <h2 class="section-title">Workout</h2>
-          <div class="workout-pills">
-            ${WORKOUTS.map((w) => {
-              const sel = log.workouts.includes(w);
-              return `<button class="workout-chip ${sel ? "selected" : ""}" onclick="toggleWorkout('${w}')">${w}</button>`;
-            }).join("")}
-          </div>
-        </div>
+        <hr class="divider" />
 
-        <div class="panel">
-          <h2 class="section-title">Notes</h2>
-          <div class="field-group" style="margin-bottom: 0;">
-            <textarea rows="3" placeholder="Write your daily notes..." onchange="getDayLog(state.selectedDate).notes = this.value; saveState();">${log.notes || ""}</textarea>
+        <details class="expander">
+          <summary>› Edit Diet &amp; Goals</summary>
+          <div class="expander-body">
+            <h3 class="col-title">Set Your Daily Targets</h3>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;">
+              <div>
+                <label class="field-label" for="goal-kcal">Total Daily Calorie Goal (kcal)</label>
+                <input id="goal-kcal" type="number" min="500" max="6000" step="50" value="${state.targetKcal}" onchange="state.targetKcal = Number(this.value || 2000); saveState(); render();" />
+              </div>
+              <div>
+                <label class="field-label" for="goal-protein">Total Daily Protein Goal (g)</label>
+                <input id="goal-protein" type="number" min="0" max="400" step="5" value="${state.targetProtein}" onchange="state.targetProtein = Number(this.value || 130); saveState(); render();" />
+              </div>
+            </div>
+
+            <h3 class="col-title">Manage Your Meals</h3>
+            ${state.meals.map((m) => `
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:8px; font-size:13px;">
+                <span>${m.name} (${m.calories} kcal, ${m.protein}g) - ${m.mandatory ? "Mandatory" : "Optional"}</span>
+                <button type="button" class="workout-chip" onclick="deleteMeal(${m.id})">Delete</button>
+              </div>
+            `).join("")}
+
+            <h3 class="col-title" style="margin-top:14px;">Add New Meal to Diet</h3>
+            <form onsubmit="addMealFromForm(event)">
+              <div style="margin-bottom:8px;">
+                <input id="new-meal-name" type="text" placeholder="Meal Name (e.g., Snack)" required />
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px;">
+                <input id="new-meal-cal" type="number" min="0" step="10" value="0" placeholder="Calories" />
+                <input id="new-meal-prot" type="number" min="0" step="1" value="0" placeholder="Protein (g)" />
+              </div>
+              <label class="radio-opt" style="margin-bottom:10px;">
+                <input id="new-meal-mand" type="checkbox" checked />
+                <span>Mandatory</span>
+              </label>
+              <button type="submit" class="meal-btn">Add Meal</button>
+            </form>
           </div>
-        </div>
+        </details>
       `;
     }
 
     function renderResults() {
       const totals = computeDayTotals(state.selectedDate);
       return `
-        <div class="panel">
-          <h2 class="section-title">Results & Goals</h2>
-          <p style="color:var(--muted); margin-top:0;">Selected day (${state.selectedDate}): <strong>${totals.spentKcal}</strong> / <strong>${state.targetKcal}</strong> kcal and <strong>${totals.proteinDone}g</strong> / <strong>${state.targetProtein}g</strong> protein.</p>
-          <div class="field-group">
-            <label for="goal-kcal">Daily Calorie Goal (kcal)</label>
-            <input id="goal-kcal" type="number" min="500" max="6000" step="50" value="${state.targetKcal}" onchange="state.targetKcal = Number(this.value || 2000); saveState(); render();" />
-          </div>
-          <div class="field-group" style="margin-bottom:0;">
-            <label for="goal-protein">Daily Protein Goal (g)</label>
-            <input id="goal-protein" type="number" min="0" max="400" step="5" value="${state.targetProtein}" onchange="state.targetProtein = Number(this.value || 130); saveState(); render();" />
-          </div>
+        <div class="panel-box">
+          <h2 class="section-title">Results &amp; Goals</h2>
+          <p style="color:var(--muted); margin-top:0;">Selected day (${state.selectedDate}): <strong style="color:var(--text);">${totals.intakeCal}</strong> / <strong style="color:var(--text);">${state.targetKcal}</strong> kcal and <strong style="color:var(--text);">${totals.proteinDone}g</strong> / <strong style="color:var(--text);">${state.targetProtein}g</strong> protein.</p>
         </div>
       `;
     }
 
     function renderAI() {
       const totals = computeDayTotals(state.selectedDate);
-      const tip = totals.remainingKcal > 400
-        ? `You still have ${totals.remainingKcal} kcal and ${totals.proteinToGo}g protein left today—a lean protein + veggies meal fits well.`
-        : totals.remainingKcal >= 0
-          ? `You're right on track with ${totals.remainingKcal} kcal remaining today.`
-          : `You're ${Math.abs(totals.remainingKcal)} kcal above your daily target today—keep the next meal light and protein-focused.`;
-
+      const tip = totals.leftCal > 400
+        ? `You still have ${totals.leftCal} kcal and ${totals.proteinVal}g protein left today.`
+        : totals.leftCal >= 0
+          ? `You're right on track with ${totals.leftCal} kcal remaining today.`
+          : `You're ${Math.abs(totals.leftCal)} kcal above your daily target today.`;
       return `
-        <div class="panel">
+        <div class="panel-box">
           <h2 class="section-title">AI Assistant</h2>
-          <p style="line-height:1.5; margin:0;">${tip}</p>
+          <p style="margin:0; line-height:1.5;">${tip}</p>
         </div>
       `;
     }
@@ -495,14 +698,14 @@
     function renderHistoric() {
       const dates = Object.keys(state.logs).sort().reverse();
       return `
-        <div class="panel">
+        <div class="panel-box">
           <h2 class="section-title">Historic Log</h2>
-          ${dates.length === 0 ? "<p style='color:var(--muted)'>No saved days yet. Mark meals or edit notes in Diary.</p>" : dates.map((d) => {
+          ${dates.length === 0 ? "<p style='color:var(--muted); margin:0;'>No saved days yet.</p>" : dates.map((d) => {
             const t = computeDayTotals(d);
             const l = state.logs[d];
             return `
               <div class="history-item">
-                <div><strong>${d}</strong> — ${t.spentKcal} / ${state.targetKcal} kcal</div>
+                <div><strong>${d}</strong> — ${t.intakeCal} / ${state.targetKcal} kcal</div>
                 <div style="font-size:13px; color:var(--muted);">Workout: ${(l.workouts && l.workouts.length) ? l.workouts.join(", ") : "Rest / None"}</div>
                 ${l.notes ? `<div style="font-size:13px; margin-top:4px;">${l.notes}</div>` : ""}
               </div>
