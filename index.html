@@ -10,10 +10,10 @@
       --card: #1A1C23;
       --border: #333333;
       --wine: #571712;
-      --wine-border: #7A231C;
+      --wine-hover: #7A231C;
       --accent: #FF6B6B;
       --text: #FFFFFF;
-      --muted: #AAAAAA;
+      --muted: #B0B5C0;
     }
 
     * {
@@ -25,7 +25,7 @@
       background: var(--bg);
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      padding: 16px 14px 116px 14px;
+      padding: 16px 14px 118px 14px;
       display: flex;
       justify-content: center;
     }
@@ -104,7 +104,6 @@
       gap: 12px;
       min-height: 40px;
       font-size: 13px;
-      color: var(--text);
     }
 
     .radio-opt {
@@ -141,14 +140,12 @@
       margin: 0 0 12px 0;
       font-size: 20px;
       font-weight: 700;
-      color: var(--text);
     }
 
     .col-title {
       margin: 0 0 10px 0;
       font-size: 16px;
       font-weight: 700;
-      color: var(--text);
     }
 
     .meals-grid {
@@ -164,7 +161,7 @@
       margin-bottom: 10px;
       padding: 8px 12px;
       border-radius: 10px;
-      border: 1px solid var(--wine-border);
+      border: 1px solid var(--wine-hover);
       background: var(--wine);
       color: var(--text);
       font-size: 14px;
@@ -174,7 +171,7 @@
     }
 
     .meal-btn:hover {
-      background: var(--wine-border);
+      background: var(--wine-hover);
     }
 
     .meal-btn.active {
@@ -194,7 +191,7 @@
       width: 100%;
       height: 40px;
       border-radius: 10px;
-      border: 1px solid var(--wine-border);
+      border: 1px solid var(--wine-hover);
       background: var(--wine);
       color: var(--text);
       font-size: 14px;
@@ -203,7 +200,7 @@
     }
 
     .mark-all-btn:hover {
-      background: var(--wine-border);
+      background: var(--wine-hover);
     }
 
     .divider {
@@ -248,13 +245,13 @@
       border: 1px solid var(--border);
       background: #12151C;
       color: var(--text);
-      font-size: 13px;
+      font-size: 12px;
       cursor: pointer;
     }
 
     .workout-chip.selected {
       background: var(--wine);
-      border-color: var(--wine-border);
+      border-color: var(--wine-hover);
       font-weight: 600;
     }
 
@@ -275,7 +272,6 @@
       padding: 12px 14px;
       font-size: 15px;
       font-weight: 600;
-      color: var(--text);
     }
 
     details.expander > summary::-webkit-details-marker {
@@ -284,6 +280,37 @@
 
     .expander-body {
       padding: 4px 14px 14px 14px;
+    }
+
+    .meal-edit-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    .meal-edit-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .small-btn {
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #242832;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .small-btn.danger {
+      border-color: var(--wine-hover);
+      background: var(--wine);
     }
 
     .panel-box {
@@ -303,7 +330,6 @@
       border-bottom: none;
     }
 
-    /* Barra flutuante inferior estilo iPhone */
     .float-nav-wrap {
       position: fixed;
       left: 50%;
@@ -391,7 +417,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "easy_kcal_py_style_v1";
+    const STORAGE_KEY = "easy_kcal_v3";
     const WORKOUTS = ["Abs", "Shoulders + Back", "Cardio", "Quad + Pantu", "Butt", "Arms"];
 
     const defaultData = {
@@ -410,6 +436,7 @@
     };
 
     let workoutMenuOpen = false;
+    let editingMealId = null;
 
     function loadState() {
       try {
@@ -485,6 +512,38 @@
       };
     }
 
+    function startEditMeal(mealId) {
+      editingMealId = mealId;
+      render();
+    }
+
+    function cancelEditMeal() {
+      editingMealId = null;
+      render();
+    }
+
+    function saveEditedMeal(mealId) {
+      const nameEl = document.getElementById(`edit-name-${mealId}`);
+      const calEl = document.getElementById(`edit-cal-${mealId}`);
+      const protEl = document.getElementById(`edit-prot-${mealId}`);
+      const mandEl = document.getElementById(`edit-mand-${mealId}`);
+
+      const meal = state.meals.find((m) => m.id === mealId);
+      if (!meal || !nameEl) return;
+
+      const cleanName = nameEl.value.trim();
+      if (!cleanName) return;
+
+      meal.name = cleanName;
+      meal.calories = Number(calEl.value || 0);
+      meal.protein = Number(protEl.value || 0);
+      meal.mandatory = Boolean(mandEl.checked);
+
+      editingMealId = null;
+      saveState();
+      render();
+    }
+
     function addMealFromForm(e) {
       e.preventDefault();
       const nameInput = document.getElementById("new-meal-name");
@@ -493,6 +552,7 @@
       const mandInput = document.getElementById("new-meal-mand");
       const name = (nameInput.value || "").trim();
       if (!name) return;
+
       const nextId = state.meals.reduce((acc, m) => Math.max(acc, m.id), 0) + 1;
       state.meals.push({
         id: nextId,
@@ -507,6 +567,7 @@
 
     function deleteMeal(mealId) {
       state.meals = state.meals.filter((m) => m.id !== mealId);
+      if (editingMealId === mealId) editingMealId = null;
       saveState();
       render();
     }
@@ -587,6 +648,52 @@
         <textarea id="daily-notes" onchange="getDayLog(state.selectedDate).notes = this.value; saveState();">${log.notes || ""}</textarea>
       `;
 
+      const mealsEditorList = state.meals.map((m) => {
+        if (editingMealId === m.id) {
+          return `
+            <div class="meal-edit-card">
+              <div style="margin-bottom:8px;">
+                <label class="field-label" style="margin-bottom:4px;">Name</label>
+                <input id="edit-name-${m.id}" type="text" value="${m.name}" />
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+                <div>
+                  <label class="field-label" style="margin-bottom:4px;">Calories (kcal)</label>
+                  <input id="edit-cal-${m.id}" type="number" min="0" step="10" value="${m.calories}" />
+                </div>
+                <div>
+                  <label class="field-label" style="margin-bottom:4px;">Protein (g)</label>
+                  <input id="edit-prot-${m.id}" type="number" min="0" step="1" value="${m.protein}" />
+                </div>
+              </div>
+              <label class="radio-opt" style="margin-bottom:10px;">
+                <input id="edit-mand-${m.id}" type="checkbox" ${m.mandatory ? "checked" : ""} />
+                <span>Mandatory</span>
+              </label>
+              <div style="display:flex; gap:8px;">
+                <button type="button" class="small-btn danger" onclick="saveEditedMeal(${m.id})">Save</button>
+                <button type="button" class="small-btn" onclick="cancelEditMeal()">Cancel</button>
+              </div>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="meal-edit-card">
+            <div class="meal-edit-row">
+              <div style="font-size:13px;">
+                <strong>${m.name}</strong><br />
+                <span style="color:var(--muted);">${m.calories} kcal · ${m.protein}g · ${m.mandatory ? "Mandatory" : "Optional"}</span>
+              </div>
+              <div style="display:flex; gap:6px;">
+                <button type="button" class="small-btn" onclick="startEditMeal(${m.id})">Edit</button>
+                <button type="button" class="small-btn danger" onclick="deleteMeal(${m.id})">Delete</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
       return `
         <div class="metrics-grid">
           <div class="metric-card">
@@ -627,30 +734,25 @@
 
         <hr class="divider" />
 
-        <details class="expander">
+        <details class="expander" ${editingMealId !== null ? "open" : ""}>
           <summary>› Edit Diet &amp; Goals</summary>
           <div class="expander-body">
             <h3 class="col-title">Set Your Daily Targets</h3>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;">
               <div>
-                <label class="field-label" for="goal-kcal">Total Daily Calorie Goal (kcal)</label>
+                <label class="field-label" for="goal-kcal">Daily Calorie Goal (kcal)</label>
                 <input id="goal-kcal" type="number" min="500" max="6000" step="50" value="${state.targetKcal}" onchange="state.targetKcal = Number(this.value || 2000); saveState(); render();" />
               </div>
               <div>
-                <label class="field-label" for="goal-protein">Total Daily Protein Goal (g)</label>
+                <label class="field-label" for="goal-protein">Daily Protein Goal (g)</label>
                 <input id="goal-protein" type="number" min="0" max="400" step="5" value="${state.targetProtein}" onchange="state.targetProtein = Number(this.value || 130); saveState(); render();" />
               </div>
             </div>
 
-            <h3 class="col-title">Manage Your Meals</h3>
-            ${state.meals.map((m) => `
-              <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:8px; font-size:13px;">
-                <span>${m.name} (${m.calories} kcal, ${m.protein}g) - ${m.mandatory ? "Mandatory" : "Optional"}</span>
-                <button type="button" class="workout-chip" onclick="deleteMeal(${m.id})">Delete</button>
-              </div>
-            `).join("")}
+            <h3 class="col-title">Edit Meals</h3>
+            ${mealsEditorList || "<p style='color:var(--muted); font-size:13px;'>No meals registered.</p>"}
 
-            <h3 class="col-title" style="margin-top:14px;">Add New Meal to Diet</h3>
+            <h3 class="col-title" style="margin-top:14px;">Add New Meal</h3>
             <form onsubmit="addMealFromForm(event)">
               <div style="margin-bottom:8px;">
                 <input id="new-meal-name" type="text" placeholder="Meal Name (e.g., Snack)" required />
